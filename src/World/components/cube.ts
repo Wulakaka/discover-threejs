@@ -19,13 +19,22 @@ function createCube() {
   // create a Mesh containing the geometry and material
   const cube = new Mesh(geometry, material)
 
-  // cube.rotation.order = 'YXZ' // set the order of rotation to YXZ
-  cube.rotation.x = MathUtils.degToRad(40) // rotate 45 degrees around the x-axis
-  cube.rotation.y = MathUtils.degToRad(30) // rotate 45 degrees around the y-axis
+  cube.rotation.set(-0.5, -0.1, 0.8)
 
-  cube.position.z = 6
-  // cube.position.y = -1
-  // cube.scale.setScalar(3) // scale the cube by 1.5 in all directions
+  const radiansPerSecond = MathUtils.degToRad(30)
+
+  let x = 0
+
+  cube.tick = (delta: number) => {
+    // increase the cube's rotation each frame
+    cube.rotation.z += radiansPerSecond * delta
+    cube.rotation.x += radiansPerSecond * delta
+    cube.rotation.y += radiansPerSecond * delta
+
+    x += 1 * delta
+    x = x % 10
+    cube.position.x = x - 5
+  }
 
   return cube
 }
