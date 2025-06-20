@@ -1,4 +1,5 @@
-import { Camera, Clock, Scene, WebGLRenderer } from 'three'
+import { Clock } from 'three'
+import type { Camera, Scene, WebGLRenderer } from 'three'
 
 const clock = new Clock()
 

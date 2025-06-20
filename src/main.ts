@@ -1,4 +1,3 @@
-import '@/styles/main.css'
 import { World } from './World/World'
 
 function main() {
