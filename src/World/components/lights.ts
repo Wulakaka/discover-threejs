@@ -11,13 +11,13 @@ function createLights() {
 
   let theta = 0
 
-  const r = 5
+  const r = 10
 
   light.tick = (delta: number) => {
     theta += radiansPerSecond * delta
     // make the light move in a circle around the origin
     light.position.x = r * Math.cos(theta)
-    light.position.z = r * Math.sin(theta)
+    light.position.y = r * Math.sin(theta)
   }
 
   return light

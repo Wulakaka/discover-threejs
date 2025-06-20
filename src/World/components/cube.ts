@@ -5,16 +5,41 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshStandardMaterial,
+  RepeatWrapping,
+  TextureLoader,
 } from 'three'
+import img from '~/assets/textures/uv-test-col.png'
+
+function createMaterial() {
+  // create a texture loader
+  const textureLoader = new TextureLoader()
+
+  // load a texture
+  const texture = textureLoader.load(img)
+
+  texture.wrapS = RepeatWrapping
+  texture.wrapT = RepeatWrapping
+  // texture.center.set(0.2, 0.2)
+
+  texture.rotation = Math.PI
+
+  // create a "standard" material
+  const material = new MeshStandardMaterial({
+    map: texture,
+    // displacementMap: texture,
+    transparent: true,
+    // color: 'purple',
+  })
+
+  return material
+}
 
 function createCube() {
   // create a geometry
   const geometry = new BoxGeometry(2, 2, 2)
 
   // create a default (white) Basic material
-  const material = new MeshStandardMaterial({
-    color: 'peachpuff',
-  })
+  const material = createMaterial()
 
   // create a Mesh containing the geometry and material
   const cube = new Mesh(geometry, material)
