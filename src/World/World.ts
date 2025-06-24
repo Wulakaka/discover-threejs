@@ -2,6 +2,8 @@ import { createCamera } from './components/camera'
 import { createCube } from './components/cube'
 import { createLights } from './components/lights'
 import { createScene } from './components/scene'
+
+import { createControls } from './systems/control'
 import { createRenderer } from './systems/renderer'
 import { Resizer } from './systems/Resizer'
 import { Loop } from './systems/Loop'
@@ -14,16 +16,27 @@ class World {
   constructor(container: HTMLDivElement) {
     container.append(this.renderer.domElement)
 
+    const controls = createControls(this.camera, this.renderer.domElement)
+
     const cube = createCube()
     const light = createLights()
 
     // this.loop.updatables.push(cube)
     // this.loop.updatables.push(this.camera)
-    this.loop.updatables.push(light)
+    // this.loop.updatables.push(light)
+    this.loop.updatables.push(controls)
 
     this.scene.add(cube, light)
 
     const resizer = new Resizer(container, this.camera, this.renderer)
+
+    // 按需渲染
+    // controls.addEventListener('change', () => {
+    //   this.render()
+    // })
+    // resizer.onResize = () => {
+    //   this.render()
+    // }
   }
 
   render() {
