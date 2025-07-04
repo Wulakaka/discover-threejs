@@ -5,7 +5,7 @@
     class="grid grid-cols-2 grid-rows-2 gap-2 w-[128px] aspect-square bg-white rounded-full overflow-clip relative"
   >
     <div
-      v-for="i of 4"
+      v-for="i of [1, 2, 4, 3]"
       :key="i"
       class="hover:bg-amber-500 cursor-pointer bg-gray-300 flex items-center justify-center"
     >
