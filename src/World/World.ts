@@ -1,5 +1,5 @@
 import { createCamera } from './components/camera'
-import { createCube } from './components/cube'
+import { createMeshGroup } from './components/meshGroup'
 import { createLights } from './components/lights'
 import { createScene } from './components/scene'
 
@@ -18,16 +18,15 @@ class World {
 
     const controls = createControls(this.camera, this.renderer.domElement)
 
-    const cube = createCube()
+    const meshGroup = createMeshGroup()
     const { ambientLight, mainLight } = createLights()
 
     // this.loop.updatables.push(cube)
     // this.loop.updatables.push(this.camera)
     // this.loop.updatables.push(light)
-    this.loop.updatables.push(controls)
+    this.loop.updatables.push(controls, meshGroup)
 
-    this.camera.add(mainLight)
-    this.scene.add(cube, ambientLight, this.camera)
+    this.scene.add(ambientLight, mainLight, meshGroup)
 
     // console.log(this.camera.target.position)
     // mainLight.target.position.copy(cube.position)
