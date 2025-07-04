@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { World } from '~/src/World/World'
 
+definePageMeta({
+  layout: 'plain',
+})
+
 const container = useTemplateRef<HTMLDivElement>('scene-container')
 
 onMounted(() => {

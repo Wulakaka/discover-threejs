@@ -19,14 +19,18 @@ class World {
     const controls = createControls(this.camera, this.renderer.domElement)
 
     const cube = createCube()
-    const light = createLights()
+    const { ambientLight, mainLight } = createLights()
 
     // this.loop.updatables.push(cube)
     // this.loop.updatables.push(this.camera)
     // this.loop.updatables.push(light)
     this.loop.updatables.push(controls)
 
-    this.scene.add(cube, light)
+    this.camera.add(mainLight)
+    this.scene.add(cube, ambientLight, this.camera)
+
+    // console.log(this.camera.target.position)
+    // mainLight.target.position.copy(cube.position)
 
     const resizer = new Resizer(container, this.camera, this.renderer)
 

@@ -1,26 +1,29 @@
-import { DirectionalLight } from 'three'
+import {
+  AmbientLight,
+  DirectionalLight,
+  DirectionalLightHelper,
+  HemisphereLight,
+  SpotLight,
+} from 'three'
 
 function createLights() {
-  // create a directional light
-  const light = new DirectionalLight('white', 8)
+  const ambientLight = new HemisphereLight(
+    'white', // bright sky color
+    'darkslategrey', // dim ground color
+    3 // intensity
+  )
 
-  // move the light right, up, and towards us
-  light.position.set(10, 10, 10)
+  ambientLight.intensity = 0
 
-  const radiansPerSecond = Math.PI / 2 // 90 degrees per second
+  // ambientLight.position.y = 0.1
 
-  let theta = 0
+  const mainLight = new SpotLight('white', 10)
+  // mainLight.target.position.set(0, 0, -10)
+  // mainLight.visible = false
 
-  const r = 10
+  // const mainLightHelper = new DirectionalLightHelper(mainLight, 1)
 
-  light.tick = (delta: number) => {
-    theta += radiansPerSecond * delta
-    // make the light move in a circle around the origin
-    light.position.x = r * Math.cos(theta)
-    light.position.y = r * Math.sin(theta)
-  }
-
-  return light
+  return { mainLight, ambientLight }
 }
 
 export { createLights }

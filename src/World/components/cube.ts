@@ -8,7 +8,7 @@ import {
   RepeatWrapping,
   TextureLoader,
 } from 'three'
-import img from '~/assets/textures/uv-test-col.png'
+import img from '~/assets/textures/uv-test-bw.png'
 
 function createMaterial() {
   // create a texture loader
@@ -21,7 +21,7 @@ function createMaterial() {
   texture.wrapT = RepeatWrapping
   // texture.center.set(0.2, 0.2)
 
-  texture.rotation = Math.PI
+  // texture.rotation = Math.PI / 4
 
   // create a "standard" material
   const material = new MeshStandardMaterial({
@@ -44,7 +44,7 @@ function createCube() {
   // create a Mesh containing the geometry and material
   const cube = new Mesh(geometry, material)
 
-  cube.rotation.set(-0.5, -0.1, 0.8)
+  cube.rotation.set(0, -0.5, 0)
 
   const radiansPerSecond = MathUtils.degToRad(30)
 
