@@ -1,14 +1,11 @@
 import { World } from './World/World'
 
-function main() {
-  // Get a reference to the container element
-  const container = <HTMLDivElement>document.querySelector('#scene-container')
-
+export async function main(container: HTMLDivElement) {
   // create a new world
   const world = new World(container)
+
+  await world.init()
 
   // start the animation loop
   world.start()
 }
-
-main()

@@ -1,3 +1,4 @@
+import { loadBirds } from './components/birds/birds'
 import { createCamera } from './components/camera'
 import { createMeshGroup } from './components/meshGroup'
 import { createLights } from './components/lights'
@@ -13,10 +14,9 @@ class World {
   private scene = createScene()
   private renderer = createRenderer()
   private loop = new Loop(this.camera, this.scene, this.renderer)
+  private controls = createControls(this.camera, this.renderer.domElement)
   constructor(container: HTMLDivElement) {
     container.append(this.renderer.domElement)
-
-    const controls = createControls(this.camera, this.renderer.domElement)
 
     const meshGroup = createMeshGroup()
     const { ambientLight, mainLight } = createLights()
@@ -24,9 +24,9 @@ class World {
     // this.loop.updatables.push(cube)
     // this.loop.updatables.push(this.camera)
     // this.loop.updatables.push(light)
-    this.loop.updatables.push(controls, meshGroup)
+    this.loop.updatables.push(this.controls)
 
-    this.scene.add(ambientLight, mainLight, meshGroup)
+    this.scene.add(ambientLight, mainLight)
 
     // console.log(this.camera.target.position)
     // mainLight.target.position.copy(cube.position)
@@ -40,6 +40,13 @@ class World {
     // resizer.onResize = () => {
     //   this.render()
     // }
+  }
+
+  async init() {
+    const { parrot, flamingo, stork } = await loadBirds()
+    this.scene.add(parrot, flamingo, stork)
+
+    this.controls.target.copy(parrot.position)
   }
 
   render() {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { World } from '~/src/World/World'
+import { main } from '~/src/main'
 
 definePageMeta({
   layout: 'plain',
@@ -12,11 +12,10 @@ onMounted(() => {
     console.error('Container element not found')
     return
   }
-  // create a new world
-  const world = new World(container.value)
 
-  // start the animation loop
-  world.start()
+  main(container.value).catch((error) => {
+    console.error(error)
+  })
 })
 </script>
 
