@@ -7,13 +7,13 @@ import {
 } from 'three'
 
 function createLights() {
-  const ambientLight = new HemisphereLight('white', 'darkslategrey', 5)
+  const ambientLight = new HemisphereLight('white', 'darkslategrey', 2)
 
   // ambientLight.intensity = 0
 
   // ambientLight.position.y = 0.1
 
-  const mainLight = new DirectionalLight('white', 4)
+  const mainLight = new DirectionalLight('white', 2)
   mainLight.position.set(10, 10, 10)
   // mainLight.visible = false
 

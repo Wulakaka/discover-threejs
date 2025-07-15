@@ -9,16 +9,16 @@ function createCamera() {
   )
 
   // move the camera back so we can view the scene
-  camera.position.set(-1.5, 1.5, 6.5)
+  camera.position.set(-5, 5, 7)
 
-  const lengthPerSecond = 1
+  // const lengthPerSecond = 1
 
-  let z = 0
+  // let z = 0
 
-  camera.tick = (delta: number) => {
-    z += lengthPerSecond * delta
-    camera.position.z = Math.abs((z % 20) - 10) + 10
-  }
+  // camera.tick = (delta: number) => {
+  //   z += lengthPerSecond * delta
+  //   camera.position.z = Math.abs((z % 20) - 10) + 10
+  // }
 
   return camera
 }

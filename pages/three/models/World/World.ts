@@ -1,8 +1,9 @@
 import { loadBirds } from './components/birds/birds'
 import { createCamera } from './components/camera'
-import { createMeshGroup } from './components/meshGroup'
+// import { createMeshGroup } from './components/meshGroup'
 import { createLights } from './components/lights'
 import { createScene } from './components/scene'
+import { Train } from './components/Train/Train'
 
 import { createControls } from './systems/control'
 import { createRenderer } from './systems/renderer'
@@ -18,15 +19,13 @@ class World {
   constructor(container: HTMLDivElement) {
     container.append(this.renderer.domElement)
 
-    const meshGroup = createMeshGroup()
+    // const meshGroup = createMeshGroup()
     const { ambientLight, mainLight } = createLights()
+    const train = new Train()
 
-    // this.loop.updatables.push(cube)
-    // this.loop.updatables.push(this.camera)
-    // this.loop.updatables.push(light)
-    this.loop.updatables.push(this.controls)
+    this.loop.updatables.push(this.controls, train)
 
-    this.scene.add(ambientLight, mainLight)
+    this.scene.add(ambientLight, mainLight, train)
 
     // console.log(this.camera.target.position)
     // mainLight.target.position.copy(cube.position)
@@ -47,7 +46,7 @@ class World {
     this.scene.add(parrot, flamingo, stork)
 
     this.loop.updatables.push(parrot)
-    this.controls.target.copy(parrot.position)
+    // this.controls.target.copy(parrot.position)
   }
 
   render() {
