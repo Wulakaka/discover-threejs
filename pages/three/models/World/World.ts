@@ -1,5 +1,6 @@
 import { loadBirds } from './components/birds/birds'
 import { createCamera } from './components/camera'
+import { createAxesHelper, createGridHelper } from './components/helpers'
 // import { createMeshGroup } from './components/meshGroup'
 import { createLights } from './components/lights'
 import { createScene } from './components/scene'
@@ -39,6 +40,8 @@ class World {
     // resizer.onResize = () => {
     //   this.render()
     // }
+
+    this.scene.add(createAxesHelper(), createGridHelper())
   }
 
   async init() {
