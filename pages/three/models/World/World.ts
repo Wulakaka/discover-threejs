@@ -22,11 +22,11 @@ class World {
 
     // const meshGroup = createMeshGroup()
     const { ambientLight, mainLight } = createLights()
-    const train = new Train()
+    // const train = new Train()
 
-    this.loop.updatables.push(this.controls, train)
+    this.loop.updatables.push(this.controls)
 
-    this.scene.add(ambientLight, mainLight, train)
+    this.scene.add(ambientLight, mainLight)
 
     // console.log(this.camera.target.position)
     // mainLight.target.position.copy(cube.position)
@@ -41,14 +41,14 @@ class World {
     //   this.render()
     // }
 
-    this.scene.add(createAxesHelper(), createGridHelper())
+    // this.scene.add(createAxesHelper(), createGridHelper())
   }
 
   async init() {
     const { parrot, flamingo, stork } = await loadBirds()
     this.scene.add(parrot, flamingo, stork)
 
-    this.loop.updatables.push(parrot)
+    this.loop.updatables.push(parrot, flamingo, stork)
     // this.controls.target.copy(parrot.position)
   }
 

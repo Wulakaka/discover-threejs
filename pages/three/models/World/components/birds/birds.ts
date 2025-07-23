@@ -20,21 +20,23 @@ async function loadBirds() {
   parrot.scale.setScalar(0.01)
   parrot.position.set(0, 0, 2.5)
 
-  // 清除每个顶点的颜色信息
-  const colorAttribute = parrot.geometry.getAttribute('color')
-  const whiteColor = new Float32Array(colorAttribute.array.length).fill(1.0)
-  parrot.geometry.attributes.color = new BufferAttribute(whiteColor, 3)
+  function updateColor() {
+    // 清除每个顶点的颜色信息
+    const colorAttribute = parrot.geometry.getAttribute('color')
+    const whiteColor = new Float32Array(colorAttribute.array.length).fill(1.0)
+    parrot.geometry.attributes.color = new BufferAttribute(whiteColor, 3)
 
-  // 设置材质颜色
-  parrot.material.color = new Color('white')
+    // 设置材质颜色
+    parrot.material.color = new Color('white')
 
-  const hPerSecond = 0.5
-  let h = 0
-  parrot.tick = (delta) => {
-    h += hPerSecond * delta
-    h = h > 1 ? h - 1 : h
-    parrot.material.color.setHSL(h, 0.8, 0.5)
-    parrot.material.needsUpdate = true
+    const hPerSecond = 0.5
+    let h = 0
+    parrot.tick = (delta) => {
+      h += hPerSecond * delta
+      h = h > 1 ? h - 1 : h
+      parrot.material.color.setHSL(h, 0.8, 0.5)
+      parrot.material.needsUpdate = true
+    }
   }
 
   const flamingo = setupModel(flamingoData)
