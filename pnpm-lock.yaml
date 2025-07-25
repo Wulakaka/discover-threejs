@@ -44,6 +44,9 @@ importers:
       three:
         specifier: ^0.177.0
         version: 0.177.0
+      three-bvh-csg:
+        specifier: ^0.0.17
+        version: 0.0.17(three-mesh-bvh@0.9.1(three@0.177.0))(three@0.177.0)
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -4111,6 +4114,12 @@ packages:
   text-hex@1.0.0:
     resolution: {integrity: sha512-uuVGNWzgJ4yhRaNSiubPY7OjISw4sw4E5Uv0wbjp+OzcbmVU/rsT8ujgcXJhn9ypzsgr5vlzpPqP+MBBKcGvbg==}
 
+  three-bvh-csg@0.0.17:
+    resolution: {integrity: sha512-iEkHDF8GRfGM6593Cuw8SnF1vfENCp46gIAtRzuL4nGXGWPcR1sbTBwM9ptDONb5twqlZp5WkAKya5aBKe2qcA==}
+    peerDependencies:
+      three: '>=0.151.0'
+      three-mesh-bvh: '>=0.6.6'
+
   three-custom-shader-material@5.4.0:
     resolution: {integrity: sha512-Yn1lFlKOk3Vul3npEGAmbbFUZ5S2+yjPgM2XqJEZEYRSUUH2vk+WVYrtTB6Bcq15wa7hLUXAKoctAvbRmBmbYA==}
     peerDependencies:
@@ -4122,6 +4131,11 @@ packages:
         optional: true
       react:
         optional: true
+
+  three-mesh-bvh@0.9.1:
+    resolution: {integrity: sha512-WNT+m9jGQgtp4YdtwEnl4oFylNVifRf7iphlwWdJ4bJu7oNkY0xHIyntep9OzHuR1hpe/pyAP840gB/EsYDJfg==}
+    peerDependencies:
+      three: '>= 0.159.0'
 
   three-stdlib@2.36.0:
     resolution: {integrity: sha512-kv0Byb++AXztEGsULgMAs8U2jgUdz6HPpAB/wDJnLiLlaWQX2APHhiTJIN7rqW+Of0eRgcp7jn05U1BsCP3xBA==}
@@ -9240,12 +9254,21 @@ snapshots:
 
   text-hex@1.0.0: {}
 
+  three-bvh-csg@0.0.17(three-mesh-bvh@0.9.1(three@0.177.0))(three@0.177.0):
+    dependencies:
+      three: 0.177.0
+      three-mesh-bvh: 0.9.1(three@0.177.0)
+
   three-custom-shader-material@5.4.0(three@0.177.0):
     dependencies:
       glsl-token-functions: 1.0.1
       glsl-token-string: 1.0.1
       glsl-tokenizer: 2.1.5
       object-hash: 3.0.0
+      three: 0.177.0
+
+  three-mesh-bvh@0.9.1(three@0.177.0):
+    dependencies:
       three: 0.177.0
 
   three-stdlib@2.36.0(three@0.177.0):
