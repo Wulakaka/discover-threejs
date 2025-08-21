@@ -31,7 +31,9 @@ export function getSurfaceMaterial() {
 
     varying vec3 vPosition;
 
-    // varying vec3 vNormal;
+    varying vec3 vNormalOrigin;
+
+    varying vec3 vCameraPosition;
 
     uniform float uMinHeight;
 
@@ -44,11 +46,19 @@ export function getSurfaceMaterial() {
 
     // transformed.y = uMinHeight + uPhase * (transformed.y - uMinHeight);
 
-    vPosition = position;`,
+    vNormalOrigin = normal;
+
+    vCameraPosition = cameraPosition;
+
+    vPosition = position;`
     )
 
     shader.fragmentShader = `
     varying vec3 vPosition;
+
+    varying vec3 vNormalOrigin;
+
+    varying vec3 vCameraPosition;
 
     uniform vec3 uIntersection;
 
@@ -72,15 +82,32 @@ export function getSurfaceMaterial() {
 
     vec3 lineColor = uLineColor;
 
-    gl_FragColor.rgb = mix(lineColor, gl_FragColor.rgb, drawLineX);
+    vec3 c = mix(lineColor, gl_FragColor.rgb, drawLineX);
 
-    gl_FragColor.rgb = mix(lineColor, gl_FragColor.rgb, drawLineZ);
+    c = mix(lineColor, c, drawLineZ);
+
+    // gl_FragColor.rgb = mix(lineColor, gl_FragColor.rgb, drawLineX);
+
+    // gl_FragColor.rgb = mix(lineColor, gl_FragColor.rgb, drawLineZ);
+
+    vec3 toA = normalize(uIntersection - vCameraPosition);
+    vec3 toB = normalize(vec3(uIntersection.x - 1.0, uIntersection.yz) - vCameraPosition);
+    vec3 customNormal = normalize(cross(toA, toB));
+
+    float dist = dot(vPosition - vCameraPosition, customNormal);
+    dist = abs(dist);
+    dist = step(0.05, dist);
+
+    // gl_FragColor.rgb = mix(lineColor, gl_FragColor.rgb, dist);
+    
+    
+    gl_FragColor.rgb = c;
 
     // if(vPosition.y > uIntersection.y) {
 
     //   gl_FragColor.a = 0.0;
     
-    // }`,
+    // }`
     )
   }
 
