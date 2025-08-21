@@ -129,11 +129,17 @@ function onPointerLeave() {
 </script>
 
 <template>
-  <primitive
-    :object="mesh"
-    @pointer-enter="onPointerEnter"
-    @pointer-leave="onPointerLeave"
-  />
+  <TresGroup>
+    <primitive
+      :object="mesh"
+      @pointer-enter="onPointerEnter"
+      @pointer-leave="onPointerLeave"
+    />
+    <TresMesh :position-z="customUniforms.uIntersection.value.z">
+      <TresPlaneGeometry :args="[120, 30, 1]" />
+      <TresMeshStandardMaterial />
+    </TresMesh>
+  </TresGroup>
 </template>
 
 <style scoped></style>
