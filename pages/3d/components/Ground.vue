@@ -14,19 +14,19 @@ const material = new MeshStandardMaterial({
   roughness: 0.5,
 })
 
-const geometry = new BoxGeometry(length, 10, width)
+const geometry = new BoxGeometry()
 
 const brushBase = new Brush(geometry, material)
+brushBase.scale.set(length, 10, width)
 brushBase.position.set(0, -5, 0)
 brushBase.updateMatrixWorld()
-
-const binGeometry = new BoxGeometry(2, 2, 2)
 
 let result = brushBase
 for (let i = 0; i < 10; i++) {
   const x = Math.random() * length - length / 2
   const z = Math.random() * width - width / 2
-  const brush = new Brush(binGeometry, material)
+  const brush = new Brush(geometry, material)
+  brush.scale.set(2, 2, 2)
   brush.position.set(x, -1, z)
   brush.updateMatrixWorld()
   const evaluator = new Evaluator()
