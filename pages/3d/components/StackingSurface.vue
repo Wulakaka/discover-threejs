@@ -2,10 +2,24 @@
 import { onBeforeUnmount } from 'vue'
 import * as THREE from 'three'
 import * as d3 from 'd3'
-
+// import type { OrbitControls } from '@tresjs/cientos'
+import { useLoop } from '@tresjs/core'
 import { getSurfaceMaterial } from '../utils/getSurfaceMaterial'
-
 import { data } from '../utils/surfaceData'
+import type { OrbitControls } from 'three/examples/jsm/Addons.js'
+
+const props = defineProps<{
+  controls?: { instance: OrbitControls }
+}>()
+
+const controls = computed(() => props.controls)
+
+watchEffect(() => {
+  if (controls.value) {
+    // 获取到摄像机的 target
+    // console.log('OrbitControls target:', controls.value.instance.target)
+  }
+})
 
 interface ResponseData {
   xrealValues: number[]
@@ -19,6 +33,38 @@ const positionInWorld = (x: number, y: number, z: number) => [x, z, y]
 const geometry = new THREE.BufferGeometry()
 
 const { material, customUniforms } = getSurfaceMaterial()
+
+const { raycaster } = useTresContext()
+
+const { onBeforeRender } = useLoop()
+
+onBeforeRender(() => {
+  const intersections = raycaster.value.intersectObject(mesh, false)
+
+  const intersection = intersections[0]
+  if (!intersection) {
+    xIndex.value = -1
+    yIndex.value = -1
+    return
+  }
+  // intersection.point 是世界坐标
+  const worldPoint = intersection.point.clone()
+
+  // 转换为 mesh 的本地坐标
+  const localPoint = mesh.worldToLocal(worldPoint.clone())
+
+  yIndex.value = d3.minIndex(data.data.yrealValues, (y) =>
+    Math.abs(y - localPoint.z)
+  )
+
+  xIndex.value = d3.minIndex(data.data.xrealValues, (x) =>
+    Math.abs(x - localPoint.x)
+  )
+
+  // console.log(xIndex.value, yIndex.value)
+
+  // customUniforms.uIntersection.value.copy(localPoint)
+})
 
 // 创建网格
 const mesh = new THREE.Mesh(geometry, material)
@@ -47,8 +93,8 @@ function updateGeometry(
   if (topPoints.length < 3) return
 
   // 顶面三角剖分
-  const topPointsFlat: [number, number][] = topPoints.map((p) => [p.x, p.z])
-  const delaunay = d3.Delaunay.from(topPointsFlat)
+  const topPointsFlat: number[] = topPoints.flatMap((p) => [p.x, p.z])
+  const delaunay = new d3.Delaunay(topPointsFlat)
   const topTriangles = Array.from(delaunay.triangles)
 
   // 顶面索引
@@ -108,37 +154,80 @@ updateGeometry(data.data, geometry)
 
 onBeforeUnmount(() => {
   if (mesh) {
-    mesh.geometry.dispose()
-    mesh.material.dispose()
+    mesh.geometry?.dispose()
+    mesh.material?.dispose()
   }
 })
 
-function onPointerEnter(intersection: THREE.Intersection) {
-  // intersection.point 是世界坐标
-  const worldPoint = intersection.point.clone()
+const xIndex = ref(0)
+const yIndex = ref(0)
 
-  // 转换为 mesh 的本地坐标
-  const localPoint = mesh.worldToLocal(worldPoint.clone())
+const lineXGeometry = new THREE.BufferGeometry()
+const lineYGeometry = new THREE.BufferGeometry()
 
-  customUniforms.uIntersection.value.copy(localPoint)
+const lineMaterial = new THREE.LineBasicMaterial({
+  color: 'red',
+  depthTest: false,
+})
+
+const lineXMaterial = new THREE.LineBasicMaterial({
+  color: 'blue',
+  depthTest: false,
+})
+
+const lineX = new THREE.Line(lineXGeometry, lineXMaterial)
+const lineY = new THREE.Line(lineYGeometry, lineMaterial)
+
+watchEffect(() => {
+  updateLineX(xIndex.value)
+})
+
+watchEffect(() => {
+  updateLineY(yIndex.value)
+})
+
+function updateLineX(xIndex: number) {
+  const { xrealValues, yrealValues, data: d } = data.data
+  if (xIndex < 0 || xIndex >= xrealValues.length) return
+  const positions = new Float32Array(yrealValues.length * 3)
+  for (let i = 0; i < yrealValues.length; i++) {
+    const x = xrealValues[xIndex]
+    const y = yrealValues[i]
+    const z = d[i]?.[xIndex] ?? customUniforms.uMinHeight.value
+    positions.set([x, z + 0.1, y], i * 3)
+  }
+
+  lineXGeometry.setAttribute(
+    'position',
+    new THREE.Float32BufferAttribute(positions, 3)
+  )
+
+  lineXGeometry.computeBoundingSphere()
 }
 
-function onPointerLeave() {
-  customUniforms.uIntersection.value.set(9999, 9999, 9999) // 重置到一个不可能的值
+function updateLineY(yIndex: number) {
+  const { xrealValues, yrealValues, data: d } = data.data
+  if (yIndex < 0 || yIndex >= yrealValues.length) return
+  const positions = new Float32Array(xrealValues.length * 3)
+  for (let i = 0; i < xrealValues.length; i++) {
+    const x = xrealValues[i]
+    const y = yrealValues[yIndex]
+    const z = d[yIndex]?.[i] ?? customUniforms.uMinHeight.value
+    positions.set([x, z + 0.01, y], i * 3)
+  }
+  lineYGeometry.setAttribute(
+    'position',
+    new THREE.Float32BufferAttribute(positions, 3)
+  )
+  lineYGeometry.computeBoundingSphere()
 }
 </script>
 
 <template>
   <TresGroup>
-    <primitive
-      :object="mesh"
-      @pointer-enter="onPointerEnter"
-      @pointer-leave="onPointerLeave"
-    />
-    <TresMesh :position-z="customUniforms.uIntersection.value.z">
-      <TresPlaneGeometry :args="[120, 30, 1]" />
-      <TresMeshStandardMaterial />
-    </TresMesh>
+    <primitive :object="mesh" />
+    <primitive :object="lineY" />
+    <primitive :object="lineX" />
   </TresGroup>
 </template>
 
