@@ -10,5 +10,5 @@ export default defineNuxtConfig({
   },
 
   ssr: false,
-  modules: ['@nuxt/eslint', '@nuxt/image', '@tresjs/nuxt'],
+  modules: ['@nuxt/eslint', '@nuxt/image', '@tresjs/nuxt', '@vueuse/nuxt'],
 })
